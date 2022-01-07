@@ -7,9 +7,17 @@ namespace MiddleRidge.Test.Menu
     public class ViewProvider
     {
         [Provides]
-        private ITestMenuView TestMenuView()
+        public ITestMenuView TestMenuView([InjectName("canvas")] GameObject canvas)
         {
-            return GameObject.Find("Panel").GetComponent<ITestMenuView>();
+            var panelPrefab = Resources.Load<GameObject>(@"Panel");
+            var panel = Object.Instantiate(panelPrefab, canvas.transform);
+            return panel.GetComponent<ITestMenuView>();
+        }
+
+        [Provides("canvas")]
+        public GameObject GetCanvas()
+        {
+            return GameObject.Find("Canvas");
         }
     }
 }

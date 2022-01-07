@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace MiddleRidge.Test.Menu
 {
+    [BindViews]
     public class TestMenuView : VisibilitySwitchableView, ITestMenuView
     {
         [BindSubView("Exit")] private Button exitBtn;

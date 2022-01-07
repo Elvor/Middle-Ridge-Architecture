@@ -16,7 +16,7 @@ namespace MiddleRidge.DI.Impl
             foreach (var type in types)
             {
                 if (type.Namespace != null && !type.Namespace.StartsWith(nameof(MiddleRidge))) continue;
-                
+
                 var component = HandleAsComponent(type, componentAttributes);
                 if (component != null)
                 {
@@ -25,10 +25,7 @@ namespace MiddleRidge.DI.Impl
                 else
                 {
                     var res = HandleAsDependencyProvider(type, componentTypes);
-                    if (res != null)
-                    {
-                        result.AddRange(res);
-                    }
+                    if (res != null) result.AddRange(res);
                 }
             }
 
@@ -37,7 +34,8 @@ namespace MiddleRidge.DI.Impl
 
         private IEnumerable<ComponentData> HandleAsDependencyProvider(Type type, IEnumerable<Type> componentAttributes)
         {
-            var dpAttribute = (DependencyProvider) System.Attribute.GetCustomAttribute(type, typeof(DependencyProvider));
+            var dpAttribute =
+                (DependencyProvider) System.Attribute.GetCustomAttribute(type, typeof(DependencyProvider));
             if (dpAttribute == null) return null;
 
             if (!componentAttributes.Contains(dpAttribute.ComponentType)) return null;
@@ -50,7 +48,8 @@ namespace MiddleRidge.DI.Impl
             var providerObj = constructorInfo.Invoke(Array.Empty<object>());
 
             var result = new LinkedList<ComponentData>();
-            foreach (var methodInfo in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var methodInfo in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic |
+                                                       BindingFlags.Instance))
             {
                 var attr = (Provides) System.Attribute.GetCustomAttribute(methodInfo, typeof(Provides));
                 if (attr == null) continue;
@@ -201,7 +200,8 @@ namespace MiddleRidge.DI.Impl
             }
             else if (!ReferenceEquals(prev, dep))
             {
-                throw new ModuleContainerBuildException($"Overriding {prev.GetType().Name} with {dep.Obj.GetType().Name}");
+                throw new ModuleContainerBuildException(
+                    $"Overriding {prev.GetType().Name} with {dep.Obj.GetType().Name}");
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace MiddleRidge.DI.Attribute
 {
+    [AttributeUsage(AttributeTargets.Field)]
     public class BindSubView : System.Attribute
     {
         public BindSubView(string subViewPath)

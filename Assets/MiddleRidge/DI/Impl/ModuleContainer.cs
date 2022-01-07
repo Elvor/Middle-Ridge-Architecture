@@ -30,7 +30,7 @@ namespace MiddleRidge.DI.Impl
             foreach (var objectWithInfo in objects)
             {
                 HandleModuleObject(objectWithInfo);
-                if (objectWithInfo.Obj is UnityView view) HandleUnityView(view);
+                if (objectWithInfo.Obj is MonoBehaviour view) HandleUnityView(view);
                 if (objectWithInfo.Obj is ILifeCycleManaged managed)
                     HandleLifecycleManaged(managed, objectWithInfo.HandleOrder);
             }
@@ -70,8 +70,12 @@ namespace MiddleRidge.DI.Impl
             switchableToEnable.Clear();
         }
 
-        private void HandleUnityView(UnityView unityView)
+        private void HandleUnityView(MonoBehaviour unityView)
         {
+            if (!HasBindViewsAttribute(unityView))
+            {
+                return;
+            }
             var fields = unityView.GetType()
                 .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var field in fields)
@@ -84,6 +88,11 @@ namespace MiddleRidge.DI.Impl
                 var path = ((BindSubView) attrs[0]).SubViewPath;
                 field.SetValue(unityView, unityView.transform.Find(path).GetComponent(field.FieldType));
             }
+        }
+        
+        private bool HasBindViewsAttribute(MonoBehaviour obj) {
+            var attrs = System.Attribute.GetCustomAttributes(obj.GetType());
+            return attrs.Any(a => a is BindViews);
         }
 
         private void HandleModuleObject(ObjectWithInfo objectWithInfo)

@@ -1,3 +1,1 @@
-1. Unity view to attribute
-2. Load from resources
-3. non privet ibjection
+1. Load from resources

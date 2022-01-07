@@ -1,10 +1,12 @@
 ﻿using System;
-using MiddleRidge.DI;
+using MiddleRidge.DI.Attribute;
 using UniRx;
+using UnityEngine;
 
 namespace MiddleRidge.MVP
 {
-    public class VisibilitySwitchableView : UnityView, IVisibilitySwitchableView
+    [BindViews]
+    public class VisibilitySwitchableView : MonoBehaviour, IVisibilitySwitchableView
     {
         private readonly Subject<bool> stateChangeSubject = new Subject<bool>();
 
@@ -18,10 +20,7 @@ namespace MiddleRidge.MVP
             get => gameObject.activeSelf;
             set
             {
-                if (value == gameObject.activeSelf)
-                {
-                    return;
-                }
+                if (value == gameObject.activeSelf) return;
                 Switch();
             }
         }
