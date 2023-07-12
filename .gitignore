@@ -17,6 +17,8 @@ Assets/Plugins/Editor/JetBrains*
 [Pp]ackages/
 [Aa]ssets/[Pp]lugins/
 Assets/AssetStoreTools*
+[Pp]rojectSettings/
+[Uu]serSettings/
 
 # Visual Studio cache directory
 .vs/
